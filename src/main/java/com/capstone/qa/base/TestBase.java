@@ -8,12 +8,12 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
 
 import com.capstone.qa.util.TestUtil;
 
@@ -47,6 +47,7 @@ public class TestBase {
 			System.setProperty("webdriver.chrome.driver", "C:\\Users\\Sam\\Downloads\\chromedriver.exe");
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-notifications"); // to disable all popups and alerts
+
 			/*
 			 * options.addArguments("window-size=1400,800");//headless browser
 			 * options.addArguments("headless");//headless browser
@@ -64,6 +65,8 @@ public class TestBase {
 		driver.manage().timeouts().implicitlyWait(TestUtil.IMPLICIT_WAIT, TimeUnit.SECONDS);
 
 		driver.get(prop.getProperty("url"));
+		// Execute JavaScript to set the zoom level to 73%
+	    
 
 		/*
 		 * try { TestUtil.takeScreenshotAtEndOfTest(); } catch (IOException e) { // TODO

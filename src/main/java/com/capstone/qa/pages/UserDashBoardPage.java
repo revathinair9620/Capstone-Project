@@ -27,14 +27,12 @@ public class UserDashBoardPage extends TestBase {
 	//Actions
 	
 	public String validateUserDashBoardPageTitle() {
-		TestUtil.waitUntilPageLoad();
 		String title= driver.getTitle();
 		System.out.println("The title of the current page is --->" +title);
 		return title;
 	}
 	
 	public String validateUserDashBoardPageURL() throws InterruptedException {
-		TestUtil.waitUntilPageLoad();
 		String currentURL= driver.getCurrentUrl();
 		System.out.println("The Current URL of the page is---> " +currentURL);
 		return driver.getCurrentUrl();

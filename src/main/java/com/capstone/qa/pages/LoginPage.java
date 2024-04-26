@@ -1,4 +1,5 @@
 package com.capstone.qa.pages;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -13,7 +14,7 @@ public class LoginPage extends TestBase {
 		WebElement email;
 		@FindBy(xpath = "//input[@id='mat-input-1']")
 		WebElement password;
-		@FindBy(xpath = "//span[contains(text(),'Login')]")
+		@FindBy(xpath = "//span[contains(text(),'Login')]") 
 		WebElement loginbtn;
 		@FindBy(xpath = "//*[@id=\"mat-radio-3-input\"]")
 		WebElement emailotpraidobtn;
@@ -21,6 +22,7 @@ public class LoginPage extends TestBase {
 		WebElement sendbtn;
 		@FindBy(xpath = "//span[contains(text(),'Submit')]")
 		WebElement submitbtn;
+		
 
 
 	// Initializing the Page Objects:
@@ -44,6 +46,10 @@ public class LoginPage extends TestBase {
 		sendbtn.click();
 		TestUtil.waitUntilElementClickable(submitbtn);
 		submitbtn.click();
+		/*
+		 * JavascriptExecutor js = (JavascriptExecutor) driver;
+		 * js.executeScript("document.body.style.zoom = '73%'");
+		 */
 		return new UserDashBoardPage();	
 	}
 	
