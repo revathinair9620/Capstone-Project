@@ -14,6 +14,8 @@ public class FinancePage extends TestBase {
 
 	String searchQuery = "sac"; // First three letters entered in the search bar
 	String desiredUserName = "Sachin S"; // Name of the user you want to select
+	String appointmentName = "RevApp - 30-04-2024";
+	String entityListName = " 12Internal Company ";
 
 	// 1. Locators: OR
 	@FindBy(xpath = "//mat-icon[contains(text(),'menu_open')]")
@@ -32,7 +34,19 @@ public class FinancePage extends TestBase {
 	WebElement financeTab;
 
 	@FindBy(xpath = "//span[contains(text(),'New Estimate')]")
-	WebElement newEstimate;
+	WebElement newEstimateBtn;
+
+	@FindBy(xpath = "//mat-label[contains(text(),'Appointment')]")
+	WebElement appointmentBtn;
+
+	@FindBy(xpath = "//*[@id='mat-select-12-panel']")
+	WebElement appointmentList;
+
+	@FindBy(xpath = "//mat-label[contains(text(),'Entity')]")
+	WebElement entityBtn;
+
+	@FindBy(xpath = "//*[@id='mat-select-8-panel']")
+	WebElement entityList;
 
 	// Initializing the Page Objects:
 	public FinancePage() {
@@ -53,7 +67,7 @@ public class FinancePage extends TestBase {
 		return driver.getCurrentUrl();
 	}
 
-	public void searchPatientDetails() throws InterruptedException {
+	public void createNewEstimate() throws InterruptedException {
 		menutab.click();
 		searchmenu.click();
 		searchPatientTab.sendKeys(searchQuery);
@@ -70,13 +84,37 @@ public class FinancePage extends TestBase {
 			// throw an exception to fail the test case
 		}
 		financeTab.click();
-		newEstimate.click();
+		newEstimateBtn.click();
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
 
-	}
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
 
-	public void createNewEstimate() {
-		newEstimate.click();
-		
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired appointment '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
 
 	}
 

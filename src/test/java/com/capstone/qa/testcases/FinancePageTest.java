@@ -1,7 +1,5 @@
 package com.capstone.qa.testcases;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,12 +29,9 @@ public class FinancePageTest extends TestBase {
 
 	@Test
 	public void patientSearch() throws InterruptedException {
-		financePage.searchPatientDetails();
+		financePage.createNewEstimate();
 		financePage.validateaddPatientPageURL();
 		financePage.validateaddPatientPageTitle();
-		WebElement dropdown= driver.findElement(By.xpath("//*[@id='mat-select-12']")); 
-		dropdown.click();
-		WebElement option=dropdown.findElement(By.xpath("//*[@id='mat-option-19']"));
-		option.click();
+		
 	}
 }
