@@ -21,15 +21,20 @@ public class AddPatientPage extends TestBase {
 	@FindBy(xpath = "//span[contains(text(),'Add patient')]")
 	WebElement addpatientmenu;
 
-	@FindBy(xpath = "//*[@id=\"mat-select-4-panel\"]")
+	@FindBy(xpath = "//div[@id='mat-select-4-panel']//span[text()='Mr']")
 	WebElement title;
 
 	@FindBy(xpath = "//*[@id=\"mat-input-4\"]")
 	WebElement firstname;
-	
+
 	@FindBy(xpath = "//*[@id=\"mat-input-5\"]")
 	WebElement lastname;
-
+	
+	@FindBy(xpath = "//*[@id=\"mat-input-6\"]")
+	WebElement DOB;
+	
+	//*[@id="mat-select-6-panel"]
+	
 
 	// Initializing the Page Objects:
 	public AddPatientPage() {
@@ -56,11 +61,20 @@ public class AddPatientPage extends TestBase {
 		menutab.click();
 		searchmenu.click();
 		addpatientmenu.click();
+		/*
+		 * String script = "var select = document.getElementById('" + title + "'); " +
+		 * "var event = new Event('change'); " + "select.selectedIndex = " + optionIndex
+		 * + "; " + "select.dispatchEvent(event);";
+		 * 
+		 * JavascriptExecutor js = (JavascriptExecutor) driver;
+		 * js.executeScript(script);
+		 */
 
 		/*
 		 * Select patientTitle = new Select(title);
 		 * patientTitle.selectByVisibleText("Mrs");
 		 */
+
 		/*
 		 * title.click();
 		 * 
@@ -72,6 +86,10 @@ public class AddPatientPage extends TestBase {
 		firstname.sendKeys("April");
 		TestUtil.waitUntilElementVisible(lastname);
 		lastname.sendKeys("M");
+		DOB.sendKeys("12-10-1994");
+		WebElement dropdown=driver.findElement(By.xpath("//*[@id=\"mat-select-6-panel\"]"));
+		WebElement option= dropdown.findElement(By.xpath("//mat-option/span[text()='Female']"));
+		option.click();
 		/*
 		 * JavascriptExecutor js = (JavascriptExecutor) driver;
 		 * js.executeScript("arguments[0].value='Revathi';", firstname);

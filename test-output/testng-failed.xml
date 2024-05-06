@@ -3,12 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.capstone.qa.testcases.AddPatientPageTest">
+      <class name="com.capstone.qa.testcases.FinancePageTest">
         <methods>
+          <include name="patientSearch"/>
           <include name="setUp"/>
-          <include name="patientDetailsTab"/>
         </methods>
-      </class> <!-- com.capstone.qa.testcases.AddPatientPageTest -->
+      </class> <!-- com.capstone.qa.testcases.FinancePageTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -1,5 +1,6 @@
 package com.capstone.qa.base;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,7 +9,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +16,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.capstone.qa.util.TestUtil;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 
 
@@ -44,7 +46,9 @@ public class TestBase {
 		String browserName = prop.getProperty("browser");
 
 		if (browserName.equalsIgnoreCase("chrome")) {
-			System.setProperty("webdriver.chrome.driver", "C:\\Users\\Sam\\Downloads\\chromedriver.exe");
+            WebDriverManager.chromedriver().setup(); //to fetch the latest chrome.exe version
+			//System.setProperty("webdriver.chrome.driver", "C:\\Users\\Sam\\Downloads\\chromedriver.exe");
+			
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-notifications"); // to disable all popups and alerts
 
