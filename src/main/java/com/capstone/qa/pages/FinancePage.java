@@ -16,6 +16,8 @@ public class FinancePage extends TestBase {
 	String desiredUserName = "Sachin S"; // Name of the user you want to select
 	String appointmentName = "RevApp - 30-04-2024";
 	String entityListName = " 12Internal Company ";
+	String searchListQuery = "30029"; // First three letters entered in the search bar
+	String episodeListName = "30029";
 
 	// 1. Locators: OR
 	@FindBy(xpath = "//mat-icon[contains(text(),'menu_open')]")
@@ -47,6 +49,21 @@ public class FinancePage extends TestBase {
 
 	@FindBy(xpath = "//*[@id='mat-select-8-panel']")
 	WebElement entityList;
+
+	@FindBy(xpath = "//mat-label[contains(text(),'Search episode item')]")
+	WebElement episodeItem;
+
+	@FindBy(xpath = "//input[@id='episode-search-input-auto-complete-id-0-0']")
+	WebElement searchEpisodeTab;
+
+	@FindBy(xpath = "//*[@id='mat-autocomplete-1']")
+	WebElement episodeItemList;
+
+	@FindBy(xpath = "//body/app-root[1]/app-main-layout[1]/mat-drawer-container[1]/mat-drawer[1]/div[1]/div[2]/mat-form-field[1]/div[1]/div[1]/div[4]/div[1]/button[1]/span[3]")
+	WebElement deleteBtn;
+
+	@FindBy(xpath = "//span[contains(text(),'Save')]")
+	WebElement saveBtn;
 
 	// Initializing the Page Objects:
 	public FinancePage() {
@@ -115,6 +132,24 @@ public class FinancePage extends TestBase {
 			throw new NoSuchElementException("Desired appointment '" + entityList + "' not found in search results.");
 			// throw an exception to fail the test case
 		}
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		deleteBtn.click();
+		saveBtn.click();
 
 	}
 
