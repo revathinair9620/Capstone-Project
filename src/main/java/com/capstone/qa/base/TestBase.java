@@ -60,6 +60,7 @@ public class TestBase {
 
 		} else if (browserName.equalsIgnoreCase("FF")) {
 			System.setProperty("webdriver.gecko.driver", "C:\\browserdrivers\\chromedriver.exe");
+		
 			//driver = new FirefoxDriver();
 		}
 

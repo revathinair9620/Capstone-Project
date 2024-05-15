@@ -7,18 +7,22 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.capstone.qa.base.TestBase;
 
 public class TestUtil extends TestBase {
@@ -91,7 +95,7 @@ public class TestUtil extends TestBase {
 	}
 
 	public static void waitUntilElementVisible(WebElement element) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(500));
 		wait.until(ExpectedConditions.visibilityOf(element));
 	}
 
@@ -115,11 +119,42 @@ public class TestUtil extends TestBase {
 
 	}
 
+	public static void scrollVertically(WebDriver driver, int pixels) {
+		try {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(arguments[0],0)", pixels);}
+		catch(Exception e){
+			System.out.println("Vertical scroll is not working" +e.getMessage());
+			
+		}
+	}
+
+	public static void waitUntilPageRefresh() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
+		// Execute JavaScript to monitor the page state
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		boolean isPageLoaded = (boolean) js.executeScript("return document.readyState").equals("complete");
+
+		// If the page is not yet loaded, wait until it's complete
+		if (!isPageLoaded) {
+			wait.until(webDriver -> js.executeScript("return document.readyState").equals("complete"));
+		}
+
+	}
+
 	// function to scrollIntoView
 	public static void scrollIntoView(WebElement element, WebDriver driver) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView(true);", element);
 
+	}
+
+	// Create FluentWait instance with timeout of 30 seconds and polling interval of
+	// 2 seconds
+	public static WebElement waitForElement(WebElement element, Duration timeout, Duration pollingInterval) {
+		Wait<WebDriver> wait = new FluentWait<>(driver).withTimeout(timeout).pollingEvery(pollingInterval);
+
+		return wait.until((ExpectedCondition<WebElement>) webDriver -> element);
 	}
 
 //	public static void ClickOn(WebDriver driver, WebElement locator, Duration timeout) {

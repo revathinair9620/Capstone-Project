@@ -5,8 +5,8 @@
     <classes>
       <class name="com.capstone.qa.testcases.FinancePageTest">
         <methods>
+          <include name="performAddEstimate"/>
           <include name="setUp"/>
-          <include name="performValidEstimateandInvoiceCreation"/>
         </methods>
       </class> <!-- com.capstone.qa.testcases.FinancePageTest -->
     </classes>
