@@ -150,7 +150,7 @@ public class TestUtil extends TestBase {
 	}
 
 	// Create FluentWait instance with timeout of 30 seconds and polling interval of
-	// 2 seconds
+// 2 seconds
 	public static WebElement waitForElement(WebElement element, Duration timeout, Duration pollingInterval) {
 		Wait<WebDriver> wait = new FluentWait<>(driver).withTimeout(timeout).pollingEvery(pollingInterval);
 

@@ -29,15 +29,21 @@ public class FinancePageTest extends TestBase {
 
 	@Test
 	public void performValidEstimateandInvoiceCreation() throws InterruptedException {
-		financePage.createNewEstimateandInvoice();
+		//financePage.createNewEstimate();
 		financePage.validateaddPatientPageURL();
 		financePage.validateaddPatientPageTitle();
-		
+			
 	}
 	
 	@Test
 	public void performAddEstimate() throws InterruptedException {
 		financePage.createMoreEstimate();
+		
+	}
+	
+	@Test
+	public void performNewInvoice() throws InterruptedException {
+		financePage.createInvoice();
 		
 	}
 	
