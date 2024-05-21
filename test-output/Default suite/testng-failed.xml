@@ -6,7 +6,7 @@
       <class name="com.capstone.qa.testcases.FinancePageTest">
         <methods>
           <include name="setUp"/>
-          <include name="performNewInvoice"/>
+          <include name="estimateCreationWithNoDate"/>
         </methods>
       </class> <!-- com.capstone.qa.testcases.FinancePageTest -->
     </classes>

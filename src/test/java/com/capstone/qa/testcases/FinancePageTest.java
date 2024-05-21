@@ -29,7 +29,7 @@ public class FinancePageTest extends TestBase {
 
 	@Test
 	public void performValidEstimateandInvoiceCreation() throws InterruptedException {
-		//financePage.createNewEstimate();
+		financePage.createNewEstimate();
 		financePage.validateaddPatientPageURL();
 		financePage.validateaddPatientPageTitle();
 			
@@ -44,6 +44,19 @@ public class FinancePageTest extends TestBase {
 	@Test
 	public void performNewInvoice() throws InterruptedException {
 		financePage.createInvoice();
+		
+	}
+	
+	@Test
+	public void performwebTable() throws InterruptedException {
+		financePage.webTable();
+		
+	}
+	
+	@Test
+	public void estimateCreationWithNoDate() throws InterruptedException {
+		//financePage.createEstimateWithNoDate();
+		financePage.takePaymentWithDate();
 		
 	}
 	
