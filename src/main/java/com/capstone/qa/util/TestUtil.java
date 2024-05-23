@@ -130,7 +130,7 @@ public class TestUtil extends TestBase {
 	}
 
 	public static void waitUntilPageRefresh() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2000));
 		// Execute JavaScript to monitor the page state
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		boolean isPageLoaded = (boolean) js.executeScript("return document.readyState").equals("complete");
@@ -154,7 +154,7 @@ public class TestUtil extends TestBase {
 	public static WebElement waitForElement(WebElement element, Duration timeout, Duration pollingInterval) {
 		Wait<WebDriver> wait = new FluentWait<>(driver).withTimeout(timeout).pollingEvery(pollingInterval);
 
-		return wait.until((ExpectedCondition<WebElement>) webDriver -> element);
+		return wait.until(ExpectedConditions.elementToBeClickable(element));
 	}
 
 //	public static void ClickOn(WebDriver driver, WebElement locator, Duration timeout) {

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="4" total="5" passed="1" failed="0" skipped="0">
+<testng-results ignored="5" total="6" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2024-05-21T14:21:45 AEST" name="Default suite" finished-at="2024-05-21T14:22:22 AEST" duration-ms="37629">
+  <suite started-at="2024-05-23T12:50:17 AEST" name="Default suite" finished-at="2024-05-23T12:51:11 AEST" duration-ms="54077">
     <groups>
     </groups>
-    <test started-at="2024-05-21T14:21:45 AEST" name="Default test" finished-at="2024-05-21T14:22:22 AEST" duration-ms="37629">
+    <test started-at="2024-05-23T12:50:17 AEST" name="Default test" finished-at="2024-05-23T12:51:11 AEST" duration-ms="54077">
       <class name="com.capstone.qa.testcases.FinancePageTest">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:com.capstone.qa.testcases.FinancePageTest@6356695f]" started-at="2024-05-21T14:21:45 AEST" name="setUp" finished-at="2024-05-21T14:22:02 AEST" duration-ms="16702" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.capstone.qa.testcases.FinancePageTest@4f18837a]" started-at="2024-05-23T12:50:17 AEST" name="setUp" finished-at="2024-05-23T12:50:37 AEST" duration-ms="20306" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="estimateCreationWithNoDate()[pri:0, instance:com.capstone.qa.testcases.FinancePageTest@6356695f]" started-at="2024-05-21T14:22:02 AEST" name="estimateCreationWithNoDate" finished-at="2024-05-21T14:22:22 AEST" duration-ms="20825" status="PASS">
+        <test-method signature="performTakePaymentWithDate()[pri:0, instance:com.capstone.qa.testcases.FinancePageTest@4f18837a]" started-at="2024-05-23T12:50:37 AEST" name="performTakePaymentWithDate" finished-at="2024-05-23T12:51:11 AEST" duration-ms="33671" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- estimateCreationWithNoDate -->
+        </test-method> <!-- performTakePaymentWithDate -->
       </class> <!-- com.capstone.qa.testcases.FinancePageTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->

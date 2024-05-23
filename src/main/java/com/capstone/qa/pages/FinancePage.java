@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.capstone.qa.base.TestBase;
 import com.capstone.qa.util.TestUtil;
@@ -28,6 +30,7 @@ public class FinancePage extends TestBase {
 	private String childsearchListQuery = "15518";
 	private String episodeListName2 = "15518";
 	private String paymentType = "Debit Card";
+	private String refundType = "Refund";
 
 	// 1. Locators: OR
 	@FindBy(xpath = "//mat-icon[contains(text(),'menu_open')]")
@@ -156,8 +159,56 @@ public class FinancePage extends TestBase {
 	@FindBy(xpath = "//*[@id='mat-select-24-panel']")
 	WebElement payTypeList;
 
-	@FindBy(xpath = "//span[contains(text(),'Confirm')]")
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-13\"]/div/div/app-pay-modal/div/mat-dialog-actions/div/div/button[2]/span[5]")
 	WebElement confirmBtn;
+
+	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div/div[2]/div/div[2]/div/button/span[4]")
+	WebElement estimateActionDeleteBtn;
+
+	@FindBy(xpath = "//p[contains(text(),'Unable to delete. Please check if transaction exists')]")
+	WebElement transactionErrorMessage;
+
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]")
+	WebElement errorDialogBox;
+
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]/div/div/app-generic-confirm-modal/mat-dialog-actions/button/span[2]")
+	WebElement okBtn;
+
+	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div/div[2]/div/div[2]/div/div")
+	WebElement okadjustmentBtn;
+
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-31\"]/div/div/app-adjustment-modal")
+	WebElement adjustmentDialogBox;
+
+	@FindBy(xpath = "//*[@id='mat-select-value-27']")
+	WebElement refundTypeDropDown;
+
+	@FindBy(xpath = "//*[@id='mat-select-26-panel']")
+	WebElement refundOptionList;
+
+	@FindBy(xpath = "//*[@id='mat-select-value-29']")
+	WebElement paymentTypeDropDown;
+
+	@FindBy(xpath = "//*[@id='mat-select-28-panel']")
+	WebElement paymentTypeOptionList;
+
+	@FindBy(xpath = "//*[@id='mat-input-34']")
+	WebElement totalAmtBox;
+
+	@FindBy(xpath = "//*[@id='mat-input-32']")
+	WebElement reasonBox;
+
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-17\"]/div/div/app-adjustment-modal/div/mat-dialog-actions/div/div/button/span[5]")
+	WebElement adjustmentConfirmBtn;
+
+	@FindBy(xpath = "//*[@id='mat-input-28']")
+	WebElement deleteReasonBox;
+
+	@FindBy(xpath = "//span[contains(text(),'Delete')]")
+	WebElement deleteReasonCloseBtn;
+
+	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div[2]/div/span")
+	WebElement estimateDeletionValidationMsg;
 
 	// Initializing the Page Objects:
 	public FinancePage() {
@@ -580,10 +631,10 @@ public class FinancePage extends TestBase {
 
 	}
 
-	// scenario 1
-
-	// Estimate Creation – As part of Estimate creation – No need of any date Set
-	// (either appointment or Enable service Date)
+	/*
+	 * Scenario 1: Estimate Creation – As part of Estimate creation – No need of any
+	 * date Set (either appointment or Enable service Date)
+	 */
 	public void createEstimateWithNoDate() throws InterruptedException {
 		TestUtil.scrollIntoView(menutab, driver);
 		TestUtil.waitUntilElementVisible(menutab);
@@ -677,11 +728,18 @@ public class FinancePage extends TestBase {
 		deleteBtn.click();
 		Thread.sleep(2000);
 		saveBtn.click();
+		saveBtn.click();
+
 	}
 
-	// Scenario 2 Taking Deposits (Payment) to against Estimate – Date is required
-	// (either appointment date or Enable service Date) to take a payment.
-	public void takePaymentWithDate() throws InterruptedException {
+	/*
+	 * Scenario 2: Taking Deposits (Payment) to against Estimate – Date is required
+	 * (either appointment date or Enable service Date) to take a payment.
+	 * Void/Delete Estimates
+	 * 
+	 * when there is a payment;(error msg will be displayed, refund and then delete)
+	 */
+	public void takePaymentWithDateAndDeleteEstimatewithPayment() throws InterruptedException {
 		TestUtil.scrollIntoView(menutab, driver);
 		TestUtil.waitUntilElementVisible(menutab);
 		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
@@ -790,8 +848,8 @@ public class FinancePage extends TestBase {
 		deleteBtn.click();
 		Thread.sleep(2000);
 		saveBtn.click();
-		TestUtil.waitForElement(payBtn, Duration.ofSeconds(1000), Duration.ofMillis(5));
-		//Thread.sleep(2000);
+		TestUtil.waitForElement(payBtn, Duration.ofSeconds(2000), Duration.ofMillis(500));
+		Thread.sleep(2000);
 		payBtn.click();
 		// Click the date input field to open the calendar widget
 		datepickerBtn.click();
@@ -835,6 +893,195 @@ public class FinancePage extends TestBase {
 		}
 
 		confirmBtn.click();
+		Thread.sleep(2000);
+		// TestUtil.waitUntilElementVisible(afterPaymentDeleteBtn);
+		// TestUtil.waitUntilPageRefresh();
+		estimateActionDeleteBtn.click();
+		TestUtil.waitUntilElementVisible(errorDialogBox);
+		// Validate the error message
+		WebElement errorMessageElement = errorDialogBox
+				.findElement(By.xpath("//p[contains(text(),'Unable to delete. Please check if transaction exists')]"));
+		String actualErrorMessage = errorMessageElement.getText();
+		String expectedErrorMessage = "Unable to delete. Please check if transaction exists.";
+
+		if (actualErrorMessage.equals(expectedErrorMessage)) {
+			System.out.println("Error message validation passed: " + actualErrorMessage);
+		} else {
+			System.out.println("Error message validation failed. Expected: " + expectedErrorMessage + ", but got: "
+					+ actualErrorMessage);
+		}
+
+		okBtn.click();
+		okadjustmentBtn.click();
+
+		refundTypeDropDown.click();
+		TestUtil.waitUntilElementVisible(refundOptionList);
+		try {
+			WebElement refundTypeoption = refundOptionList
+					.findElement(By.xpath("//span[contains(text(),'" + refundType + "')]"));
+			// Click on the desired user
+			refundTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + refundType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + refundType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		paymentTypeDropDown.click();
+		TestUtil.waitUntilElementVisible(paymentTypeOptionList);
+		try {
+			WebElement paymentTypeoption = paymentTypeOptionList
+					.findElement(By.xpath("//span[contains(text(),'" + paymentType + "')]"));
+			// Click on the desired user
+			paymentTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + paymentType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + paymentType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		totalAmtBox.clear();
+		totalAmtBox.sendKeys("100.00");
+		reasonBox.sendKeys("Payed By mistake");
+		adjustmentConfirmBtn.click();
+
+	}
+
+	/*
+	 * Scenario 3: Taking Deposits (Payment) to against Estimate – Date is required
+	 * (either appointment date or Enable service Date) to take a payment.
+	 * Void/Delete Estimates
+	 * 
+	 * when there is no payment
+	 */
+	public void takePaymentWithDateAndDeleteEstimatewithNoPayment() throws InterruptedException {
+		TestUtil.scrollIntoView(menutab, driver);
+		TestUtil.waitUntilElementVisible(menutab);
+		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
+		menutab.click();
+		searchmenu.click();
+		searchPatientTab.sendKeys(searchQuery);
+		TestUtil.waitUntilElementVisible(patientSearchResults);
+		try {
+			WebElement desiredUser = patientSearchResults.findElement(
+					By.xpath("//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserName + "')]"));
+			// Click on the desired user
+			desiredUser.click();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired user '" + desiredUserName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired user '" + desiredUserName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		financeTab.click();
+		newEstimateBtn.click();
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
+		searchInternalProviderBtn.click();
+		searchInternalProviderTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderBtn, driver);
+		accountHolderBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderList);
+		try {
+			WebElement accholdertoption = accountHolderList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		deleteBtn.click();
+		Thread.sleep(2000);
+		saveBtn.click();
+		Thread.sleep(2000);
+		estimateActionDeleteBtn.click();
+		deleteReasonBox.sendKeys("Created By mistake");
+		deleteReasonCloseBtn.click();
+		String msg = estimateDeletionValidationMsg.getText();
+		String expectedmsg = "Marked for deletion, click save at the bottom of the screen to apply your changes.";
+		Assert.assertEquals(msg, expectedmsg);
+
+		if (expectedmsg.equals(msg)) {
+			System.out.println("Error message validation passed: " + msg);
+		} else {
+			System.out.println("Error message validation failed. Expected: " + expectedmsg + ", but got: " + msg);
+		}
+
+		saveBtn.click();
 
 	}
 }

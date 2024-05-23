@@ -1,5 +1,6 @@
 package com.capstone.qa.testcases;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -12,8 +13,6 @@ public class FinancePageTest extends TestBase {
 	LoginPage loginPage;
 	UserDashBoardPage userDashBoardPage;
 	FinancePage financePage;
-	
-	
 
 	public FinancePageTest() {
 		super(); // call the test base class constructor
@@ -32,33 +31,46 @@ public class FinancePageTest extends TestBase {
 		financePage.createNewEstimate();
 		financePage.validateaddPatientPageURL();
 		financePage.validateaddPatientPageTitle();
-			
+
 	}
-	
+
 	@Test
 	public void performAddEstimate() throws InterruptedException {
 		financePage.createMoreEstimate();
-		
+
 	}
-	
+
 	@Test
 	public void performNewInvoice() throws InterruptedException {
 		financePage.createInvoice();
-		
+
 	}
-	
+
 	@Test
 	public void performwebTable() throws InterruptedException {
 		financePage.webTable();
-		
+
 	}
-	
+
 	@Test
 	public void estimateCreationWithNoDate() throws InterruptedException {
-		//financePage.createEstimateWithNoDate();
-		financePage.takePaymentWithDate();
-		
+		financePage.createEstimateWithNoDate();
+
 	}
-	
-	
+
+	@Test
+	public void performTakePaymentWithDateAndDeleteEstimatewithPayment() throws InterruptedException {
+		financePage.takePaymentWithDateAndDeleteEstimatewithPayment();
+
+	}
+
+	@Test
+	public void performTakePaymentWithDateAndDeleteEstimatewithNoPayment() throws InterruptedException {
+		financePage.takePaymentWithDateAndDeleteEstimatewithNoPayment();
+	}
+
+	/*
+	 * @AfterMethod public void teardown() { driver.quit(); }
+	 */
+
 }

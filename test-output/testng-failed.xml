@@ -5,8 +5,8 @@
     <classes>
       <class name="com.capstone.qa.testcases.FinancePageTest">
         <methods>
+          <include name="performTakePaymentWithDate"/>
           <include name="setUp"/>
-          <include name="estimateCreationWithNoDate"/>
         </methods>
       </class> <!-- com.capstone.qa.testcases.FinancePageTest -->
     </classes>
