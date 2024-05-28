@@ -141,6 +141,9 @@ public class FinancePage extends TestBase {
 	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div/div[5]/div[1]/div/div/div[1]/button/span[2]")
 	WebElement createInvoiceBtn;
 
+	@FindBy(xpath = "//span[contains(text(),'Add Invoice')]")
+	WebElement addInvoiceBtn;
+
 	@FindBy(xpath = "//span[contains(text(),'Yes')]")
 	WebElement createInvoiceYesBtn;
 
@@ -173,6 +176,12 @@ public class FinancePage extends TestBase {
 
 	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]/div/div/app-generic-confirm-modal/mat-dialog-actions/button/span[2]")
 	WebElement okBtn;
+	
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-16\"]")
+	WebElement invoiceErrorDialogBox;
+	
+	@FindBy(xpath = "//*[@id='mat-mdc-dialog-16']/div/div/app-generic-confirm-modal/mat-dialog-actions/button/span[2]")
+	WebElement invoiceErrorDialogBoxokBtn;
 
 	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div/div[2]/div/div[2]/div/div")
 	WebElement okadjustmentBtn;
@@ -210,6 +219,28 @@ public class FinancePage extends TestBase {
 	@FindBy(xpath = "/html/body/app-root/app-main-layout/mat-drawer-container/mat-drawer-content/div[2]/div[2]/app-patient-layout/div/div[2]/app-patient-estimate-crud/form/div[2]/div[2]/div/span")
 	WebElement estimateDeletionValidationMsg;
 
+	@FindBy(xpath = "//*[@id='mat-select-26-panel']")
+	WebElement childInvoiceAppList;
+
+	@FindBy(xpath = "(//span[@class='mat-mdc-button-touch-target'])[19]")
+	WebElement childInvoiceDeleteBtn;
+
+	@FindBy(xpath = "(//span[@class='mat-mdc-button-touch-target'])[23]")
+	WebElement childInvoiceFloppySaveBtn;
+	
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]/div/div/app-medicare-claim-confirm-modal/mat-dialog-actions/button[1]/span[2]")
+	WebElement medicareClaimCancelBtn;
+	
+	@FindBy(xpath = "//*[@id='mat-mdc-checkbox-6-input']")
+	WebElement adjustmentCheckbox;
+	
+	@FindBy(xpath = "//div[@class= 'increment-decrement-section']")
+	WebElement incrementBtn;
+	
+	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-18\"]/div/div/app-adjustment-modal/div/mat-dialog-actions/div/div/button/span[5]")
+	WebElement invoiceAdjustmentConfirmBtn;
+	
+	
 	// Initializing the Page Objects:
 	public FinancePage() {
 		PageFactory.initElements(driver, this);
@@ -344,6 +375,10 @@ public class FinancePage extends TestBase {
 
 	}
 
+	/*
+	 * Scenario1: Create estimate with date, add child estimate, convert it to
+	 * invoice
+	 */
 	public void createMoreEstimate() throws InterruptedException {
 
 		FinancePage obj = new FinancePage(); // creating obj of that page
@@ -428,117 +463,7 @@ public class FinancePage extends TestBase {
 
 	}
 
-	public void createInvoice() throws InterruptedException {
-		TestUtil.scrollIntoView(menutab, driver);
-		TestUtil.waitUntilElementVisible(menutab);
-		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
-		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
-		menutab.click();
-		searchmenu.click();
-		searchPatientTab.sendKeys(searchQuery);
-		TestUtil.waitUntilElementVisible(patientSearchResults);
-		try {
-			WebElement desiredUser = patientSearchResults.findElement(
-					By.xpath("//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserName + "')]"));
-			// Click on the desired user
-			desiredUser.click();
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out.println("Desired user '" + desiredUserName + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException("Desired user '" + desiredUserName + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-
-		financeTab.click();
-		newInvoiceBtn.click();
-		appointmentBtn.click();
-		TestUtil.waitUntilElementVisible(appointmentList);
-		try {
-			WebElement appointmentoption = appointmentList
-					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
-			// Click on the desired user
-			appointmentoption.click();
-
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException(
-					"Desired appointment '" + appointmentName + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-
-		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
-		searchInternalProviderBtn.click();
-		searchInternalProviderTab.sendKeys(internalProviderQuery);
-		TestUtil.waitUntilElementVisible(searchInternalProviderList);
-		try {
-			WebElement searchInternalProviderOption = searchInternalProviderList
-					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
-			// Click on the desired user
-			searchInternalProviderOption.click();
-
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out
-					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException(
-					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-
-		TestUtil.scrollIntoView(entityBtn, driver);
-		entityBtn.click();
-		TestUtil.waitUntilElementVisible(entityList);
-		try {
-			WebElement entitytoption = entityList
-					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
-			// Click on the desired user
-			entitytoption.click();
-
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-
-		TestUtil.scrollIntoView(accountHolderBtn, driver);
-		accountHolderBtn.click();
-		TestUtil.waitUntilElementVisible(accountHolderList);
-		try {
-			WebElement accholdertoption = accountHolderList
-					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
-			// Click on the desired user
-			accholdertoption.click();
-
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-
-		TestUtil.scrollIntoView(episodeItem, driver);
-		episodeItem.click();
-		searchEpisodeTab.sendKeys(searchListQuery);
-		TestUtil.waitUntilElementVisible(episodeItemList);
-		try {
-			WebElement episodeOption = episodeItemList
-					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
-			// Click on the desired user
-			episodeOption.click();
-
-		} catch (org.openqa.selenium.NoSuchElementException e) {
-			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
-			// Handle the case where the desired user is not found
-			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
-			// throw an exception to fail the test case
-		}
-		invoiceDeleteBtn.click();
-		Thread.sleep(2000);
-		saveBtn.click();
-	}
-
+	/* Method to validate account history table */
 	public void webTable() throws InterruptedException {
 		TestUtil.scrollIntoView(menutab, driver);
 		TestUtil.waitUntilElementVisible(menutab);
@@ -632,7 +557,7 @@ public class FinancePage extends TestBase {
 	}
 
 	/*
-	 * Scenario 1: Estimate Creation – As part of Estimate creation – No need of any
+	 * Scenario 2: Estimate Creation – As part of Estimate creation – No need of any
 	 * date Set (either appointment or Enable service Date)
 	 */
 	public void createEstimateWithNoDate() throws InterruptedException {
@@ -733,7 +658,7 @@ public class FinancePage extends TestBase {
 	}
 
 	/*
-	 * Scenario 2: Taking Deposits (Payment) to against Estimate – Date is required
+	 * Scenario 3: Taking Deposits (Payment) to against Estimate – Date is required
 	 * (either appointment date or Enable service Date) to take a payment.
 	 * Void/Delete Estimates
 	 * 
@@ -952,7 +877,7 @@ public class FinancePage extends TestBase {
 	}
 
 	/*
-	 * Scenario 3: Taking Deposits (Payment) to against Estimate – Date is required
+	 * Scenario 4: Taking Deposits (Payment) to against Estimate – Date is required
 	 * (either appointment date or Enable service Date) to take a payment.
 	 * Void/Delete Estimates
 	 * 
@@ -1065,6 +990,567 @@ public class FinancePage extends TestBase {
 			// throw an exception to fail the test case
 		}
 		deleteBtn.click();
+		Thread.sleep(2000);
+		saveBtn.click();
+		Thread.sleep(2000);
+		estimateActionDeleteBtn.click();
+		deleteReasonBox.sendKeys("Created By mistake");
+		deleteReasonCloseBtn.click();
+		String msg = estimateDeletionValidationMsg.getText();
+		String expectedmsg = "Marked for deletion, click save at the bottom of the screen to apply your changes.";
+		Assert.assertEquals(msg, expectedmsg);
+
+		if (expectedmsg.equals(msg)) {
+			System.out.println("Error message validation passed: " + msg);
+		} else {
+			System.out.println("Error message validation failed. Expected: " + expectedmsg + ", but got: " + msg);
+		}
+
+		saveBtn.click();
+
+	}
+
+	/* Scenario 5: create invoice, child invoice */
+	public void createInvoice() throws InterruptedException {
+		TestUtil.scrollIntoView(menutab, driver);
+		TestUtil.waitUntilElementVisible(menutab);
+		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
+		menutab.click();
+		searchmenu.click();
+		searchPatientTab.sendKeys(searchQuery);
+		TestUtil.waitUntilElementVisible(patientSearchResults);
+		try {
+			WebElement desiredUser = patientSearchResults.findElement(
+					By.xpath("//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserName + "')]"));
+			// Click on the desired user
+			desiredUser.click();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired user '" + desiredUserName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired user '" + desiredUserName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		financeTab.click();
+		newInvoiceBtn.click();
+		// TestUtil.waitUntilElementVisible(appointmentBtn);
+		Thread.sleep(1000);
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
+		searchInternalProviderBtn.click();
+		searchInternalProviderTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderBtn, driver);
+		accountHolderBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderList);
+		try {
+			WebElement accholdertoption = accountHolderList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		invoiceDeleteBtn.click();
+		Thread.sleep(2000);
+		saveBtn.click();
+		Thread.sleep(2000);
+		((JavascriptExecutor) driver).executeScript("arguments[0].click()", addInvoiceBtn);
+
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(childInvoiceAppList);
+		try {
+			WebElement appointmentoption = childInvoiceAppList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderChildBtn, driver);
+		searchInternalProviderChildBtn.click();
+		searchInternalProviderChildTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderChildList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderChildList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		Thread.sleep(1000);
+		TestUtil.scrollIntoView(entityChildBtn, driver);
+		entityChildBtn.click();
+		TestUtil.waitUntilElementVisible(entityChildList);
+		try {
+			WebElement entitytoption = entityChildList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderChildBtn, driver);
+		accountHolderChildBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderChildList);
+		try {
+			WebElement accholdertoption = accountHolderChildList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeChildTab.sendKeys(childsearchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemChildList);
+		try {
+			WebElement episodeOption1 = episodeItemChildList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName2 + "')]"));
+			// Click on the desired user
+			Thread.sleep(1000);
+			episodeOption1.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName2 + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName2 + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		childInvoiceDeleteBtn.click();
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", childInvoiceFloppySaveBtn);
+		childSaveBtn.click();
+	}
+	
+	
+	
+	/*
+	 * Scenario 6: Taking Deposits (Payment) to against Invoice – Date is required
+	 * (either appointment date or Enable service Date) to take a payment.
+	 * Void/Delete Estimates
+	 * 
+	 * when there is a payment;(error msg will be displayed, refund and then delete)
+	 */
+	public void takePaymentWithDateAndDeleteInvoicewithPayment() throws InterruptedException {
+		TestUtil.scrollIntoView(menutab, driver);
+		TestUtil.waitUntilElementVisible(menutab);
+		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
+		menutab.click();
+		searchmenu.click();
+		searchPatientTab.sendKeys(searchQuery);
+		TestUtil.waitUntilElementVisible(patientSearchResults);
+		try {
+			WebElement desiredUser = patientSearchResults.findElement(
+					By.xpath("//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserName + "')]"));
+			// Click on the desired user
+			desiredUser.click();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired user '" + desiredUserName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired user '" + desiredUserName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		financeTab.click();
+		newInvoiceBtn.click();
+		Thread.sleep(1000);
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
+		searchInternalProviderBtn.click();
+		searchInternalProviderTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderBtn, driver);
+		accountHolderBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderList);
+		try {
+			WebElement accholdertoption = accountHolderList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		invoiceDeleteBtn.click();
+		Thread.sleep(2000);
+		saveBtn.click();
+		TestUtil.waitForElement(payBtn, Duration.ofSeconds(2000), Duration.ofMillis(500));
+		Thread.sleep(2000);
+		payBtn.click();
+		// Click the date input field to open the calendar widget
+		datepickerBtn.click();
+		try {
+			// Wait for the calendar to be visible
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//*[@id='mat-datepicker-2']/div/mat-month-view/table")));
+
+			// Locate the calendar table
+			WebElement calendarTable = driver
+					.findElement(By.xpath("//*[@id='mat-datepicker-2']/div/mat-month-view/table"));
+
+			// Select the desired date
+			List<WebElement> dates = calendarTable.findElements(By.tagName("td")); // This assumes dates are within <td>
+																					// tags
+			for (WebElement date : dates) {
+				if (date.getText().equals("15")) { // Replace "15" with the desired day
+					date.click();
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		payTypeBtn.click();
+		TestUtil.waitUntilElementVisible(payTypeList);
+		try {
+			WebElement paymentTypeoption = payTypeList
+					.findElement(By.xpath("//span[contains(text(),'" + paymentType + "')]"));
+			// Click on the desired user
+			paymentTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + paymentType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + paymentType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		confirmBtn.click();
+		Thread.sleep(2000);
+		medicareClaimCancelBtn.click();
+		// TestUtil.waitUntilElementVisible(afterPaymentDeleteBtn);
+		// TestUtil.waitUntilPageRefresh();
+		Thread.sleep(1000);
+		estimateActionDeleteBtn.click();
+		TestUtil.waitUntilElementVisible(invoiceErrorDialogBox);
+		// Validate the error message
+		WebElement errorMessageElement = invoiceErrorDialogBox
+				.findElement(By.xpath("//p[contains(text(),'Unable to delete. Please check if transaction exists')]"));
+		String actualErrorMessage = errorMessageElement.getText();
+		String expectedErrorMessage = "Unable to delete. Please check if transaction exists.";
+
+		if (actualErrorMessage.equals(expectedErrorMessage)) {
+			System.out.println("Error message validation passed: " + actualErrorMessage);
+		} else {
+			System.out.println("Error message validation failed. Expected: " + expectedErrorMessage + ", but got: "
+					+ actualErrorMessage);
+		}
+
+		invoiceErrorDialogBoxokBtn.click();
+		okadjustmentBtn.click();
+
+		refundTypeDropDown.click();
+		TestUtil.waitUntilElementVisible(refundOptionList);
+		try {
+			WebElement refundTypeoption = refundOptionList
+					.findElement(By.xpath("//span[contains(text(),'" + refundType + "')]"));
+			// Click on the desired user
+			refundTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + refundType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + refundType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		paymentTypeDropDown.click();
+		TestUtil.waitUntilElementVisible(paymentTypeOptionList);
+		try {
+			WebElement paymentTypeoption = paymentTypeOptionList
+					.findElement(By.xpath("//span[contains(text(),'" + paymentType + "')]"));
+			// Click on the desired user
+			paymentTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + paymentType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + paymentType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		adjustmentCheckbox.click();
+		incrementBtn.click();
+		reasonBox.sendKeys("Payed By mistake");
+		invoiceAdjustmentConfirmBtn.click();
+
+	}
+	
+	/*
+	 * Scenario 7:Create invoice – Date is required
+	 * (either appointment date or Enable service Date).
+	 * Void/Delete Estimates
+	 * 
+	 * when there is no payment
+	 */
+	public void createInvoicewithDateAndDeleteInvoicewithNoPayment() throws InterruptedException {
+		TestUtil.scrollIntoView(menutab, driver);
+		TestUtil.waitUntilElementVisible(menutab);
+		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
+		menutab.click();
+		searchmenu.click();
+		searchPatientTab.sendKeys(searchQuery);
+		TestUtil.waitUntilElementVisible(patientSearchResults);
+		try {
+			WebElement desiredUser = patientSearchResults.findElement(
+					By.xpath("//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserName + "')]"));
+			// Click on the desired user
+			desiredUser.click();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired user '" + desiredUserName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired user '" + desiredUserName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		financeTab.click();
+		newInvoiceBtn.click();
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + appointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + appointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + appointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
+		searchInternalProviderBtn.click();
+		searchInternalProviderTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderBtn, driver);
+		accountHolderBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderList);
+		try {
+			WebElement accholdertoption = accountHolderList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		invoiceDeleteBtn.click();
 		Thread.sleep(2000);
 		saveBtn.click();
 		Thread.sleep(2000);
