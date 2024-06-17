@@ -61,7 +61,8 @@ public class FinancePageTest extends TestBase {
 	public void performNewInvoice() throws InterruptedException {
 		//financePage.createInvoice();
 		//financePage.takePaymentWithDateAndDeleteInvoicewithPayment();
-		financePage.createInvoicewithDateAndDeleteInvoicewithNoPayment();
+		//financePage.createInvoicewithDateAndDeleteInvoicewithNoPayment();
+		financePage.pciClaim();
 
 	}
 

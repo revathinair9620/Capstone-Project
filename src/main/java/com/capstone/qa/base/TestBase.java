@@ -1,10 +1,8 @@
 package com.capstone.qa.base;
 
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -19,8 +17,6 @@ import com.capstone.qa.util.TestUtil;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-
-
 public class TestBase {
 	public static WebDriver driver;
 	public static Properties prop;
@@ -28,12 +24,18 @@ public class TestBase {
 	public TestBase() {
 		try {
 			prop = new Properties();
-			FileInputStream ip = new FileInputStream(
-					"C:\\Users\\Sam\\eclipse-workspace\\CapstoneProject\\src\\main"
-					+ "\\java\\com\\capstone\\qa\\config\\config.properties"); // loc of config prop file
-			prop.load(ip);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+//			FileInputStream ip = new FileInputStream(
+//					"C:\\Users\\Sam\\eclipse-workspace\\CapstoneProject\\src\\main"
+//					+ "\\java\\com\\capstone\\qa\\config\\config.properties"); // loc of config prop file
+
+			try (InputStream input = TestBase.class.getClassLoader().getResourceAsStream("config.properties")) {
+				if (input == null) {
+					System.out.println("Sorry, unable to find config.properties");
+					return;
+				}
+				prop.load(input);
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -44,11 +46,17 @@ public class TestBase {
 		// WebDriver driver= new HtmlUnitDriver();//used for headless browser exe need
 		// to add htmlunit driver jar files
 		String browserName = prop.getProperty("browser");
+		
+		if (browserName == null) {
+			System.out.println("Browser name not specified in the config file.");
+			return;
+		}
 
 		if (browserName.equalsIgnoreCase("chrome")) {
-            WebDriverManager.chromedriver().setup(); //to fetch the latest chrome.exe version
-			//System.setProperty("webdriver.chrome.driver", "C:\\Users\\Sam\\Downloads\\chromedriver.exe");
-			
+			WebDriverManager.chromedriver().setup(); // to fetch the latest chrome.exe version
+			// System.setProperty("webdriver.chrome.driver",
+			// "C:\\Users\\Sam\\Downloads\\chromedriver.exe");
+
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-notifications"); // to disable all popups and alerts
 
@@ -60,8 +68,8 @@ public class TestBase {
 
 		} else if (browserName.equalsIgnoreCase("FF")) {
 			System.setProperty("webdriver.gecko.driver", "C:\\browserdrivers\\chromedriver.exe");
-		
-			//driver = new FirefoxDriver();
+
+			// driver = new FirefoxDriver();
 		}
 
 		driver.manage().window().maximize();
@@ -71,7 +79,6 @@ public class TestBase {
 
 		driver.get(prop.getProperty("url"));
 		// Execute JavaScript to set the zoom level to 73%
-	    
 
 		/*
 		 * try { TestUtil.takeScreenshotAtEndOfTest(); } catch (IOException e) { // TODO

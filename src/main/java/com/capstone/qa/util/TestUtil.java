@@ -66,6 +66,11 @@ public class TestUtil extends TestBase {
 	// String currentDate = dateFormat.format(date);
 
 	// Get the current date
+	public static String getCurrentDate() {
+        LocalDate currentDate = LocalDate.now();
+        return String.valueOf(currentDate.getDayOfMonth());
+    }
+	
 	LocalDate currentDate = LocalDate.now();
 	LocalDate currentDatePlus2Days = currentDate.minusDays(2);
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -20,8 +20,11 @@ import com.capstone.qa.util.TestUtil;
 public class FinancePage extends TestBase {
 
 	private String searchQuery = "Sac"; // First three letters entered in the search bar
+	private String searchQuerypciClaim = "Sarah BECKER";
+	private String desiredUserpciClaimName = "Sarah BECKER";
 	private String desiredUserName = "Sachin S"; // Name of the user you want to select
 	private String appointmentName = "RevApp - 30-04-2024";
+	private String pciClaimAppointmentName = "Surgical Booking - 04-06-2024 - Cary Davidson";
 	private String internalProviderQuery = "Cary Davidson";
 	private String entityListName = " 12Internal Company ";
 	private String accHolderName = " Patient ";
@@ -50,6 +53,9 @@ public class FinancePage extends TestBase {
 
 	@FindBy(xpath = "//span[contains(text(),'New Invoice')]")
 	WebElement newInvoiceBtn;
+	
+	@FindBy(xpath = "//span[contains(text(),'Yes')]")
+	WebElement yesBtn;
 
 	@FindBy(xpath = "//span[contains(text(),'New Estimate')]")
 	WebElement newEstimateBtn;
@@ -176,10 +182,10 @@ public class FinancePage extends TestBase {
 
 	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]/div/div/app-generic-confirm-modal/mat-dialog-actions/button/span[2]")
 	WebElement okBtn;
-	
+
 	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-16\"]")
 	WebElement invoiceErrorDialogBox;
-	
+
 	@FindBy(xpath = "//*[@id='mat-mdc-dialog-16']/div/div/app-generic-confirm-modal/mat-dialog-actions/button/span[2]")
 	WebElement invoiceErrorDialogBoxokBtn;
 
@@ -227,20 +233,19 @@ public class FinancePage extends TestBase {
 
 	@FindBy(xpath = "(//span[@class='mat-mdc-button-touch-target'])[23]")
 	WebElement childInvoiceFloppySaveBtn;
-	
+
 	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-15\"]/div/div/app-medicare-claim-confirm-modal/mat-dialog-actions/button[1]/span[2]")
 	WebElement medicareClaimCancelBtn;
-	
+
 	@FindBy(xpath = "//*[@id='mat-mdc-checkbox-6-input']")
 	WebElement adjustmentCheckbox;
-	
+
 	@FindBy(xpath = "//div[@class= 'increment-decrement-section']")
 	WebElement incrementBtn;
-	
+
 	@FindBy(xpath = "//*[@id=\"mat-mdc-dialog-18\"]/div/div/app-adjustment-modal/div/mat-dialog-actions/div/div/button/span[5]")
 	WebElement invoiceAdjustmentConfirmBtn;
-	
-	
+
 	// Initializing the Page Objects:
 	public FinancePage() {
 		PageFactory.initElements(driver, this);
@@ -1213,9 +1218,7 @@ public class FinancePage extends TestBase {
 		((JavascriptExecutor) driver).executeScript("arguments[0].click", childInvoiceFloppySaveBtn);
 		childSaveBtn.click();
 	}
-	
-	
-	
+
 	/*
 	 * Scenario 6: Taking Deposits (Payment) to against Invoice – Date is required
 	 * (either appointment date or Enable service Date) to take a payment.
@@ -1246,7 +1249,7 @@ public class FinancePage extends TestBase {
 
 		financeTab.click();
 		newInvoiceBtn.click();
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		appointmentBtn.click();
 		TestUtil.waitUntilElementVisible(appointmentList);
 		try {
@@ -1436,11 +1439,10 @@ public class FinancePage extends TestBase {
 		invoiceAdjustmentConfirmBtn.click();
 
 	}
-	
+
 	/*
-	 * Scenario 7:Create invoice – Date is required
-	 * (either appointment date or Enable service Date).
-	 * Void/Delete Estimates
+	 * Scenario 7:Create invoice – Date is required (either appointment date or
+	 * Enable service Date). Void/Delete Estimates
 	 * 
 	 * when there is no payment
 	 */
@@ -1568,6 +1570,172 @@ public class FinancePage extends TestBase {
 		}
 
 		saveBtn.click();
+
+	}
+
+	/*
+	 * Scenario 8: PCI claim
+	 */
+	public void pciClaim() throws InterruptedException {
+		TestUtil.scrollIntoView(menutab, driver);
+		TestUtil.waitUntilElementVisible(menutab);
+		TestUtil.waitForElement(menutab, Duration.ofSeconds(30), Duration.ofSeconds(2));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click", menutab);
+		menutab.click();
+		searchmenu.click();
+		searchPatientTab.sendKeys(searchQuerypciClaim);
+		TestUtil.waitUntilElementVisible(patientSearchResults);
+		try {
+			WebElement desiredUser = patientSearchResults.findElement(By.xpath(
+					"//div[contains(@class, 'user-name') and contains(text(), '" + desiredUserpciClaimName + "')]"));
+			// Click on the desired user
+			desiredUser.click();
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired user '" + desiredUserpciClaimName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired user '" + desiredUserpciClaimName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		financeTab.click();
+		newInvoiceBtn.click();
+		Thread.sleep(2000);
+		TestUtil.waitForElement(appointmentBtn, Duration.ofSeconds(5),Duration.ofMillis(100));
+		appointmentBtn.click();
+		TestUtil.waitUntilElementVisible(appointmentList);
+		try {
+			WebElement appointmentoption = appointmentList
+					.findElement(By.xpath("//span[contains(text(),'" + pciClaimAppointmentName + "')]"));
+			// Click on the desired user
+			appointmentoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired appointment '" + pciClaimAppointmentName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired appointment '" + pciClaimAppointmentName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(searchInternalProviderBtn, driver);
+		searchInternalProviderBtn.click();
+		searchInternalProviderTab.sendKeys(internalProviderQuery);
+		TestUtil.waitUntilElementVisible(searchInternalProviderList);
+		try {
+			WebElement searchInternalProviderOption = searchInternalProviderList
+					.findElement(By.xpath("//span[contains(text(),'" + internalProviderQuery + "')]"));
+			// Click on the desired user
+			searchInternalProviderOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out
+					.println("Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException(
+					"Desired internal provider '" + internalProviderQuery + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(entityBtn, driver);
+		entityBtn.click();
+		TestUtil.waitUntilElementVisible(entityList);
+		try {
+			WebElement entitytoption = entityList
+					.findElement(By.xpath("//span[contains(text(),'" + entityListName + "')]"));
+			// Click on the desired user
+			entitytoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired entity '" + entityListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired entity '" + entityList + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(accountHolderBtn, driver);
+		accountHolderBtn.click();
+		TestUtil.waitUntilElementVisible(accountHolderList);
+		try {
+			WebElement accholdertoption = accountHolderList
+					.findElement(By.xpath("//span[contains(text(),'" + accHolderName + "')]"));
+			// Click on the desired user
+			accholdertoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired acc holder '" + accHolderName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		TestUtil.scrollIntoView(episodeItem, driver);
+		episodeItem.click();
+		searchEpisodeTab.sendKeys(searchListQuery);
+		TestUtil.waitUntilElementVisible(episodeItemList);
+		try {
+			WebElement episodeOption = episodeItemList
+					.findElement(By.xpath("//span[contains(text(),'" + episodeListName + "')]"));
+			// Click on the desired user
+			episodeOption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired MBS '" + episodeListName + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired MBS '" + episodeListName + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+		invoiceDeleteBtn.click();
+		Thread.sleep(2000);
+		saveBtn.click();
+		TestUtil.waitForElement(payBtn, Duration.ofSeconds(2000), Duration.ofMillis(500));
+		Thread.sleep(2000);
+		payBtn.click();
+		// Click the date input field to open the calendar widget
+		datepickerBtn.click();
+		try {
+			// Wait for the calendar to be visible
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//*[@id='mat-datepicker-2']/div/mat-month-view/table")));
+
+			// Locate the calendar table
+			WebElement calendarTable = driver
+					.findElement(By.xpath("//*[@id='mat-datepicker-2']/div/mat-month-view/table"));
+
+			// Select the desired date
+			List<WebElement> dates = calendarTable.findElements(By.tagName("td")); // This assumes dates are within <td>
+																					// tags
+			for (WebElement date : dates) {
+				if (date.getText().equals("13")) { // Replace "15" with the desired day
+					date.click();
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		payTypeBtn.click();
+		TestUtil.waitUntilElementVisible(payTypeList);
+		try {
+			WebElement paymentTypeoption = payTypeList
+					.findElement(By.xpath("//span[contains(text(),'" + paymentType + "')]"));
+			// Click on the desired user
+			paymentTypeoption.click();
+
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			System.out.println("Desired payment type" + paymentType + "' not found in search results.");
+			// Handle the case where the desired user is not found
+			throw new NoSuchElementException("Desired payment type" + paymentType + "' not found in search results.");
+			// throw an exception to fail the test case
+		}
+
+		confirmBtn.click();
+		
+		Thread.sleep(2000);
+		yesBtn.click();
+		
 
 	}
 }
